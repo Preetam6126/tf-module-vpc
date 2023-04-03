@@ -79,6 +79,12 @@ resource "aws_route_table_association" "public_assocition" {
   route_table_id = aws_route_table.public_route_talbe[each.value["name"]].id
 }
  
+ 
+locals {
+ 
+ az = split("_", "web-az1")[1]
+ 
+} 
 ## Private Route Table
    
  resource "aws_route_table" "private_route_talbe" {
@@ -87,7 +93,7 @@ resource "aws_route_table_association" "public_assocition" {
   for_each         = var.private_subnets
    route {
    cidr_block      = "0.0.0.0/0"
-   nat_gateway_id  = aws_nat_gateway.nat_gateways[each.value["availability_zone"]].id
+   nat_gateway_id  = aws_nat_gateway.nat_gateways[each.value["public-${split("-",each.value["name"])[1]}"].id
   }  
   tags = merge(
   var.tags,
