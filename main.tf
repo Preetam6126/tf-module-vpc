@@ -94,7 +94,7 @@ resource "aws_route_table_association" "public_assocition" {
   { Name = "${var.env}-${each.value["name"]}" }
    )
 }
-
+ 
 ## Public Route Table Association
 
 resource "aws_route_table_association" "private_assocition" {
