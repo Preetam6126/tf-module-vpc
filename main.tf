@@ -6,6 +6,30 @@ resource "aws_vpc" "main" {
   ) 
 }
 
+## NAT Gateway
+
+resource "aws_eip" "nat" {
+  for_each = var.public_subnets
+  vpc      = true
+}
+
+resource "aws_nat_gateway" "nat_gateway" {
+  for_each = var.public_subnets
+  allocation_id = aws_eip[each.value["name"]].id
+  subnet_id     = aws_subnet[each.value["name"]].id
+  
+   tags = merge(
+     var.tags,
+     { Name = "${var.env}-${each.value=["name"]}" }
+  
+   ) 
+  }
+
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.example]
+}
+
 ## Internet Gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
