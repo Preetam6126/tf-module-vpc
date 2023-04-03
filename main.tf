@@ -146,7 +146,7 @@ resource "aws_subnet" "private_subnets" {
 
 resource "aws_route" "route" {
   route_table_id              = var.default_route_table
-  destination_ipv6_cidr_block = var.vpc_cidr
+  destination_cidr_block      = var.vpc_cidr
   vpc_peering_connection_id   = aws_vpc_peering_connection.peer.id
 }
 
