@@ -79,12 +79,6 @@ resource "aws_route_table_association" "public_assocition" {
   route_table_id = aws_route_table.public_route_talbe[each.value["name"]].id
 }
  
- 
-locals {
- 
- az = split("_", "web-az1")[1]
- 
-} 
 ## Private Route Table
    
  resource "aws_route_table" "private_route_talbe" {
