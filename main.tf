@@ -84,7 +84,11 @@ resource "aws_route_table_association" "public_assocition" {
  resource "aws_route_table" "private_route_talbe" {
   vpc_id = aws_vpc.main.id
   
-  for_each = var.private_subnets
+  for_each         = var.private_subnets
+   route {
+   cidr_block      = "0.0.0.0/0"
+   nat_gateway_id  = aws_nat_gateway.nat_gateways[each.value["availability_zone"]].id
+  }  
   tags = merge(
   var.tags,
   { Name = "${var.env}-${each.value["name"]}" }
