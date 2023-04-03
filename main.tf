@@ -20,7 +20,7 @@ resource "aws_nat_gateway" "nat_gateways" {
   
    tags = merge(
      var.tags,
-     { Name = "${var.env}-${each.value=["name"]}" }
+     { Name = "${var.env}-${each.value["name"]}" }
   
    ) 
   }
