@@ -13,7 +13,7 @@ resource "aws_eip" "nat" {
   vpc      = true
 }
 
-resource "aws_nat_gateway" "nat_gateway" {
+resource "aws_nat_gateway" "nat_gateways" {
   for_each = var.public_subnets
   allocation_id = aws_eip[each.value["name"]].id
   subnet_id     = aws_subnet[each.value["name"]].id
@@ -24,11 +24,6 @@ resource "aws_nat_gateway" "nat_gateway" {
   
    ) 
   }
-
-  # To ensure proper ordering, it is recommended to add an explicit dependency
-  # on the Internet Gateway for the VPC.
-  depends_on = [aws_internet_gateway.example]
-}
 
 ## Internet Gateway
 resource "aws_internet_gateway" "igw" {
