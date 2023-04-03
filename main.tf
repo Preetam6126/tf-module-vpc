@@ -55,6 +55,14 @@ resource "aws_route_table_association" "public_assocition" {
   { Name = "${var.env}-${each.value["name"]}" }
    )
 }
+
+## Public Route Table Association
+
+resource "aws_route_table_association" "private_assocition" {
+  for_each       = var.private_subnets
+  subnet_id      = lookup(lookup(aws_subnet.private_subnets, each.value["name"],null), "id", null)
+  route_table_id = aws_route_table.private_route_talbe[each.value["name"]].id
+}
  
 ## Private Subnets
 
