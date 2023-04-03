@@ -6,10 +6,27 @@ resource "aws_vpc" "main" {
   ) 
 }
 
+## Internet Gateway
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+
+  vpc_id = aws_vpc.main.id
+  tags = merge(
+  var.tags,
+  { Name = "${var.env}-igw" }
+  
+   ) 
+}
+
 ## Pubic Route Table
    
  resource "aws_route_table" "public_route_talbe" {
   vpc_id = aws_vpc.main.id
+  
+   route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
   
   for_each = var.public_subnets
   tags = merge(
@@ -79,4 +96,7 @@ resource "aws_subnet" "private_subnets" {
    availability_zone = each.value["availability_zone"]
    
 }
+
+
+
    
